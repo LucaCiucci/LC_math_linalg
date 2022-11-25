@@ -43,7 +43,16 @@ namespace lc
 
 		constexpr size_t offsetOf(const std::span<const size_t, rank()>& indexes) const;
 
+		// ================================
+		//          CONSTRUCTORS
+		// ================================
+
+		// TODO maybe this is more expressive! https://stackoverflow.com/a/38679907
 		constexpr FixedTensorContainerData_variable(const typename TShape2InitList<_Shape, Ty>::initializer_list& initList);
+
+		// ================================
+		//           RESHAPING
+		// ================================
 
 		constexpr void reshape(const Shape& shape);
 
@@ -66,18 +75,30 @@ namespace lc
 	template <template <class T> class _TImpl, class Ty>
 	struct FixedTensorContainerData_variable<_TImpl, Ty, TShape<variable_size>> : std::vector<double>
 	{
+		using Base = std::vector<double>;
+
 		using Shape = TensorShape<1>;
 		static inline constexpr Shape staticShape = TShape<variable_size>::shape;
 		inline static constexpr size_t variableSizeCount = 1;
 		constexpr Shape shape() const noexcept { Shape shape; shape[0] = this->size(); return shape; }
 		static constexpr size_t rank() { return 1; }
 
+		constexpr size_t offsetOf(const std::span<const size_t, 1>& indexes) const { return indexes[0]; }
+
+		// ================================
+		//          CONSTRUCTORS
+		// ================================
+
+		using Base::Base;
+
+		// ================================
+		//           RESHAPING
+		// ================================
+
 		constexpr void reshape(const Shape& shape) {
 			assert(shape[0].is_fixed());
 			this->resize(shape[0].is_fixed() ? shape[0].value() : 0);
 		}
-
-		constexpr size_t offsetOf(const std::span<const size_t, 1>& indexes) const { return indexes[0]; }
 	};
 
 	// ================================================================
@@ -99,8 +120,12 @@ namespace lc
 
 		static constexpr size_t offsetOf(const std::span<const size_t, rank()>& indexes);
 
+		// ================================
+		//          CONSTRUCTORS
+		// ================================
+
 	private:
-		std::array<Ty, elemCount(staticShape)> m_data;
+		std::array<Ty, elemCount(staticShape)> m_data = {};
 	};
 	// TODO specialize of single dim array
 
@@ -331,7 +356,7 @@ namespace lc
 		size_t off = 0;
 		size_t prod = 1;
 
-		for (size_t _i = rank(); _i > 0; ++_i)
+		for (size_t _i = rank(); _i > 0; --_i)
 		{
 			const auto i = _i - 1;
 
