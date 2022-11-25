@@ -1,0 +1,17 @@
+
+#pragma once
+
+#include <concepts>
+#include <string>
+#include <ostream>
+//#include <list>
+#include <vector>
+#include <sstream> // !!!
+#include <algorithm>
+
+namespace lc
+{
+	
+
+	
+}

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="150" viewBox="0 0 300 150">
+    
+    <defs>
+        <g id="rects">
+            <rect x="0" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="30" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="60" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="90" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="120" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="150" y="0" width="30" height="15" fill="none" stroke="black"/>
+            <rect x="180" y="0" width="30" height="15" fill="none" stroke="black"/>
+        </g>
+
+        <g id="arrow">
+            <line x1="35" x2="55" y1="45" y2="90" stroke="black" />
+        </g>
+    </defs>
+
+    <rect width="1000" height="1000" fill="white"/>
+
+    <g transform="translate(20, 30)">
+        <g transform="translate(0, 0)">
+            <use href="#rects" />
+        </g>
+
+        <g transform="translate(20, 60)">
+            <use href="#rects" />
+        </g>
+    </g>
+
+    <use href="#arrow" transform="translate(0, 0)" /><text><tspan x="35" y="70">7</tspan></text>
+    <use href="#arrow" transform="translate(30, 0)" /><text><tspan x="65" y="70">6</tspan></text>
+    <use href="#arrow" transform="translate(60, 0)" /><text><tspan x="95" y="70">5</tspan></text>
+    <use href="#arrow" transform="translate(90, 0)" /><text><tspan x="125" y="70">4</tspan></text>
+    <use href="#arrow" transform="translate(120, 0)" /><text><tspan x="155" y="70">3</tspan></text>
+    <use href="#arrow" transform="translate(150, 0)" /><text><tspan x="185" y="70">2</tspan></text>
+    <use href="#arrow" transform="translate(180, 0)" /><text><tspan x="215" y="70">1</tspan></text>
+
+</svg>

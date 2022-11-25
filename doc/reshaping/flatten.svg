@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="225" viewBox="0 0 200 150">
+    
+    <rect width="1500" height="1500" fill="white" />
+
+    <g transform="translate(15,10) scale(1.3,1.3)">
+        <rect x="10" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="13" y="20" font-size="10" fill="blue">1</tspan></text>
+        <rect x="22" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="25" y="20" font-size="10" fill="blue">2</tspan></text>
+        <rect x="34" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="37" y="20" font-size="10" fill="blue">3</tspan></text>
+        <rect x="46" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="49" y="20" font-size="10" fill="blue">4</tspan></text>
+        <rect x="58" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="61" y="20" font-size="10" fill="blue">5</tspan></text>
+        <rect x="70" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="73" y="20" font-size="10" fill="blue">6</tspan></text>
+        <rect x="82" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="85" y="20" font-size="10" fill="gray">7</tspan></text>
+        <rect x="94" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="97" y="20" font-size="10" fill="gray">8</tspan></text>
+        <rect x="106" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="109" y="20" font-size="10" fill="gray">9</tspan></text>
+    </g>
+
+    <g>
+        <path d="
+        M 90 70 l 10 0 l 0 20 l 10 0 l -20 20 l -20 -20 l 10 0 l 0 -20 l 10 0
+        " stroke-width="1" stroke="black" fill="none" transform="translate(10, -15)"/>
+    </g>
+
+    <g transform="translate(15,90) scale(1.3,1.3)">
+        <rect x="10" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="13" y="20" font-size="10" fill="blue">1</tspan></text>
+        <rect x="22" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="25" y="20" font-size="10" fill="blue">2</tspan></text>
+        <rect x="34" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="37" y="20" font-size="10" fill="blue">3</tspan></text>
+        <rect x="46" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="49" y="20" font-size="10" fill="gray">0</tspan></text>
+        <rect x="58" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="61" y="20" font-size="10" fill="blue">4</tspan></text>
+        <rect x="70" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="73" y="20" font-size="10" fill="blue">5</tspan></text>
+        <rect x="82" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="85" y="20" font-size="10" fill="blue">6</tspan></text>
+        <rect x="94" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="none" /><text font-family="consolas, monospace"><tspan x="97" y="20" font-size="10" fill="gray">0</tspan></text>
+        <rect x="106" y="10" width="12" height="15" stroke-width="1" stroke="black" fill="gray" />
+    </g>
+
+</svg>
