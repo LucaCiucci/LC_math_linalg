@@ -42,8 +42,39 @@ namespace lc
 		//          CONSTRUCTORS
 		// ================================
 
-		// TODO maybe this is more expressive! https://stackoverflow.com/a/38679907
+		// default constructor
+		constexpr FixedTensorContainerData_variable() = default;
+		
+		// copy constructor
+		constexpr FixedTensorContainerData_variable(const This& other) = default;
+
+		// move constructor
+		constexpr FixedTensorContainerData_variable(This&& other) = default;
+
+		// Construct from initializer list
+		// Example:
+		// ```cpp
+		// std::initializer_list<std::initializer_list<double>> l = { {1, 2}, {3, 4}, {5, 6} };
+		// Tensor<double, 3, nullptr> t(l);
+		// ```
 		constexpr FixedTensorContainerData_variable(const typename TShape2InitList<_Shape, Ty>::initializer_list& initList);
+
+		// Construct from initializer list (using move semantics)
+		// Example:
+		// ```cpp
+		// Tensor<double, 3, nullptr> t({
+		//     { 1, 2    },
+		//     { 0, 1    },
+		//     { 0, 0, 3 }
+		// });
+		// ```
+		constexpr FixedTensorContainerData_variable(typename TShape2InitList<_Shape, Ty>::initializer_list&& initList);
+
+		// TODO maybe add templated constructor from other init lists, but it could create ambiguity
+
+		explicit constexpr FixedTensorContainerData_variable(const Ty* value, const Shape& shape);
+
+		explicit constexpr FixedTensorContainerData_variable(Ty* value, const Shape& shape);
 
 		// ================================
 		//           RESHAPING
@@ -307,6 +338,33 @@ namespace lc
 	}
 
 	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
+	inline constexpr FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::FixedTensorContainerData_variable(typename TShape2InitList<_Shape, Ty>::initializer_list&& initList)
+	{
+		using SubT = typename TShape2InitList<_Shape, Ty>::initializer_list::value_type;
+		const auto shape = toInitShape<TensorShape, This::rank(), SubT>(initList);
+
+		this->reshape(shape);
+
+		iterateNestedInitList<TensorIndex, This::rank(), SubT>(initList, [this](const auto& idx, const auto& value) constexpr {
+			this->data()[this->offsetOf(idx)] = std::move(value);
+		});
+	}
+	
+	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
+	inline constexpr FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::FixedTensorContainerData_variable(const Ty* value, const Shape& shape)
+	{
+		this->reshape(shape);
+		std::copy(value, value + this->elementsCount(), this->data());
+	}
+
+	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
+	inline constexpr FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::FixedTensorContainerData_variable(Ty* value, const Shape& shape)
+	{
+		this->reshape(shape);
+		std::move(value, value + this->elementsCount(), this->data());
+	}
+
+	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
 	inline constexpr void FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::reshape(const Shape& _shape)
 	{
 		const Shape shape = [&]() constexpr {
@@ -361,6 +419,7 @@ namespace lc
 	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
 	inline constexpr FixedTensorContainerData_static<_TImpl, Ty, _Shape>::FixedTensorContainerData_static(const typename _Shape::template PlainArr<const Ty>& arr)
 	{
+		// see https://stackoverflow.com/a/38679907
 		constexpr size_t N = This::elementsCount();
 		std::copy((const Ty*)arr, (const Ty*)arr + N, m_data.data());
 	}
@@ -368,6 +427,7 @@ namespace lc
 	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
 	inline constexpr FixedTensorContainerData_static<_TImpl, Ty, _Shape>::FixedTensorContainerData_static(typename _Shape::template PlainArr<Ty>&& arr)
 	{
+		// see https://stackoverflow.com/a/38679907
 		size_t N = This::elementsCount();
 		std::move((Ty*)arr, (Ty*)arr + N, m_data.data());
 	}

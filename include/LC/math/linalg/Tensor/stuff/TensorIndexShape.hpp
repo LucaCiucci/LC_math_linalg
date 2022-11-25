@@ -64,22 +64,7 @@ namespace lc
 			return Container::size();
 		}
 
-		constexpr size_t elementsCount() const {
-			size_t result = 1;
-
-			// ! temporary, see reshaper.hpp
-			//for (const TensorDim& s : shapeL)
-			//	result *= s.value();
-			//for (size_t i = 0; i < shapeL.size(); ++i)
-			//	result *= TensorDim(shapeL[i]).value();
-
-			for (const TensorDim& s : *this)
-				result *= s.value();
-
-			return result;
-
-			// TODO forse si può fare return product(shapeL | transform(...));
-		}
+		constexpr size_t elementsCount() const;
 	};
 
 	template <class T, size_t N> // TODO check convertible to size_t, concept Container Convertible To 
@@ -92,12 +77,7 @@ namespace lc
 			//return Container::size();
 		}
 
-		constexpr size_t elementsCount() const {
-			size_t result = 1;
-			for (const TensorDim& s : *this)
-				result *= s.value();
-			return result;
-		}
+		constexpr size_t elementsCount() const;
 	};
 
 	template <class T>
@@ -139,7 +119,17 @@ namespace lc
 	template <TensorIndexShapeContainer ShapeL> // TODO forse pure sugli altri serve concept tensorcontainer
 	constexpr size_t elemCount(const ShapeL& shapeL)
 	{
-		return shapeL.elementsCount();
+		size_t result = 1;
+
+		// ! temporary, see reshaper.hpp
+		//for (const TensorDim& s : shapeL)
+		//	result *= s.value();
+		for (size_t i = 0; i < shapeL.size(); ++i)
+			result *= TensorDim(shapeL[i]).value();
+
+		return result;
+
+		// TODO forse si può fare return product(shapeL | transform(...));
 	}
 
 	template <TensorIndexShape ShapeL>
@@ -153,6 +143,16 @@ namespace lc
 	template <TensorIndexShape ShapeL>
 	constexpr size_t variable_size_dims_count(const ShapeL& shapeL) {
 		return std::count_if(shapeL.begin(), shapeL.end(), [](const TensorDim& dim) { return dim.is_variable(); });
+	}
+
+	template <TensorIndexShapeContainer Container>
+	constexpr size_t TensorIndexShapeImpl<Container>::elementsCount() const {
+		return ::lc::elemCount(*this);
+	}
+
+	template <class T, size_t N>
+	constexpr size_t TensorIndexShapeImpl<std::array<T, N>>::elementsCount() const {
+		return ::lc::elemCount(*this);
 	}
 
 	// ================================
