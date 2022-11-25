@@ -2,6 +2,7 @@
 #pragma once
 
 #include "TensorIndexShape.hpp"
+#include "TensorIndex.hpp"
 
 namespace lc
 {
@@ -9,10 +10,17 @@ namespace lc
 	template <TShapeType _Shape>
 	struct PartialFixedTensorShapeHolder
 	{
+	private:
+		using This = PartialFixedTensorShapeHolder<_Shape>;
+	public:
+		
 		using Shape = TensorShape<_Shape::shape.rank()>;
 		static inline constexpr Shape staticShape = _Shape::shape;
 		inline static constexpr size_t variableSizeCount = variable_size_dims_count(staticShape);
 		constexpr Shape shape() const noexcept;
+		constexpr size_t elementsCount() const noexcept { return shape().elementsCount(); }
+		static constexpr size_t rank() { return This::staticShape.rank(); }
+		constexpr size_t offsetOf(const TensorIndex<This::rank()>& indexes) const;
 
 	protected:
 
@@ -135,5 +143,22 @@ namespace lc
 			if (is_dim_assignable(i))
 				freeSizeAt(i) = dim.is_fixed() ? dim.value() : 0;
 		}
+	}
+	
+	template <TShapeType _Shape>
+	constexpr size_t PartialFixedTensorShapeHolder<_Shape>::offsetOf(const TensorIndex<This::rank()>& indexes) const
+	{
+		size_t off = 0;
+		size_t prod = 1;
+
+		for (size_t _i = This::rank(); _i > 0; --_i)
+		{
+			const auto i = _i - 1;
+
+			off += indexes[i] * prod;
+			prod *= this->shape()[i].value();
+		}
+
+		return off;
 	}
 }

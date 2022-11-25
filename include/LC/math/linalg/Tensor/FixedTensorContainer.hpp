@@ -31,17 +31,12 @@ namespace lc
 	{
 	private:
 		using Base = PartialFixedTensorShapeHolder<_Shape>;
+		using This = FixedTensorContainerData_variable<_TImpl, Ty, _Shape>;
 	public:
 		using Shape = typename Base::Shape;
-		using Base::staticShape;
-		using Base::variableSizeCount;
-
-		static constexpr size_t rank() { return staticShape.rank(); }
 
 		constexpr Ty* data() { return m_data.data(); }
 		constexpr const Ty* data() const { return m_data.data(); }
-
-		constexpr size_t offsetOf(const std::span<const size_t, rank()>& indexes) const;
 
 		// ================================
 		//          CONSTRUCTORS
@@ -81,6 +76,7 @@ namespace lc
 		static inline constexpr Shape staticShape = TShape<variable_size>::shape;
 		inline static constexpr size_t variableSizeCount = 1;
 		constexpr Shape shape() const noexcept { Shape shape; shape[0] = this->size(); return shape; }
+		constexpr size_t elementsCount() const noexcept { return shape().elementsCount(); }
 		static constexpr size_t rank() { return 1; }
 
 		constexpr size_t offsetOf(const std::span<const size_t, 1>& indexes) const { return indexes[0]; }
@@ -113,7 +109,9 @@ namespace lc
 		inline static constexpr size_t variableSizeCount = 0;
 		static inline constexpr Shape staticShape = _Shape::shape;
 		static constexpr auto shape() noexcept { return staticShape; }
+		static constexpr size_t elementsCount() noexcept { return shape().elementsCount(); }
 		static constexpr size_t rank() { return staticShape.rank(); }
+		// TODO value_type;
 
 		constexpr Ty* data() { return m_data.data(); }
 		constexpr const Ty* data() const { return m_data.data(); }
@@ -123,6 +121,17 @@ namespace lc
 		// ================================
 		//          CONSTRUCTORS
 		// ================================
+
+		// TODO defaults
+
+		constexpr FixedTensorContainerData_static(const typename _Shape::template PlainArr<const Ty>& arr);
+
+
+		constexpr FixedTensorContainerData_static(typename _Shape::template PlainArr<Ty>&& arr);
+		
+	private:
+
+		using This = FixedTensorContainerData_static<_TImpl, Ty, _Shape>;
 
 	private:
 		std::array<Ty, elemCount(staticShape)> m_data = {};
@@ -285,32 +294,14 @@ namespace lc
 	// ================================================================
 
 	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
-	inline constexpr size_t FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::offsetOf(const std::span<const size_t, rank()>& indexes) const
-	{
-
-		size_t off = 0;
-		size_t prod = 1;
-
-		for (size_t _i = rank(); _i > 0; --_i)
-		{
-			const auto i = _i - 1;
-
-			off += indexes[i] * prod;
-			prod *= this->shape()[i].value();
-		}
-
-		return off;
-	}
-
-	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
 	inline constexpr FixedTensorContainerData_variable<_TImpl, Ty, _Shape>::FixedTensorContainerData_variable(const typename TShape2InitList<_Shape, Ty>::initializer_list& initList)
 	{
 		using SubT = typename TShape2InitList<_Shape, Ty>::initializer_list::value_type;
-		const auto shape = toInitShape<TensorShape, rank(), SubT>(initList);
+		const auto shape = toInitShape<TensorShape, This::rank(), SubT>(initList);
 
 		this->reshape(shape);
 
-		iterateNestedInitList<TensorIndex, rank(), SubT>(initList, [this](const auto& idx, const auto& value) constexpr {
+		iterateNestedInitList<TensorIndex, This::rank(), SubT>(initList, [this](const auto& idx, const auto& value) constexpr {
 			this->data()[this->offsetOf(idx)] = value;
 			});
 	}
@@ -333,10 +324,10 @@ namespace lc
 			m_data.resize(newSize);
 		{
 			const auto currshape = this->shape();
-			std::array<size_t, staticShape.rank()> arrCurrShape; for (size_t i = 0; i < staticShape.rank(); ++i) arrCurrShape[i] = currshape[i].value();
-			std::array<size_t, staticShape.rank()> arrNewShape; for (size_t i = 0; i < staticShape.rank(); ++i) arrNewShape[i] = shape[i].value();
+			std::array<size_t, This::staticShape.rank()> arrCurrShape; for (size_t i = 0; i < This::staticShape.rank(); ++i) arrCurrShape[i] = currshape[i].value();
+			std::array<size_t, This::staticShape.rank()> arrNewShape; for (size_t i = 0; i < This::staticShape.rank(); ++i) arrNewShape[i] = shape[i].value();
 			//this->reshape_data<staticShape.rank()>(arrCurrShape, arrNewShape, this->data(), this->data());
-			TensorDataReshaper<rank()>::template reshape_data<Ty>(arrCurrShape, arrNewShape, this->data(), this->data());
+			TensorDataReshaper<This::rank()>::template reshape_data<Ty>(arrCurrShape, arrNewShape, this->data(), this->data());
 
 			// store the new shape
 			this->mem_shape(shape);
@@ -365,5 +356,19 @@ namespace lc
 		}
 
 		return off;
+	}
+
+	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
+	inline constexpr FixedTensorContainerData_static<_TImpl, Ty, _Shape>::FixedTensorContainerData_static(const typename _Shape::template PlainArr<const Ty>& arr)
+	{
+		constexpr size_t N = This::elementsCount();
+		std::copy((const Ty*)arr, (const Ty*)arr + N, m_data.data());
+	}
+	
+	template <template <class T> class _TImpl, class Ty, TShapeType _Shape>
+	inline constexpr FixedTensorContainerData_static<_TImpl, Ty, _Shape>::FixedTensorContainerData_static(typename _Shape::template PlainArr<Ty>&& arr)
+	{
+		size_t N = This::elementsCount();
+		std::move((Ty*)arr, (Ty*)arr + N, m_data.data());
 	}
 }

@@ -63,6 +63,23 @@ namespace lc
 		constexpr size_t rank() const {
 			return Container::size();
 		}
+
+		constexpr size_t elementsCount() const {
+			size_t result = 1;
+
+			// ! temporary, see reshaper.hpp
+			//for (const TensorDim& s : shapeL)
+			//	result *= s.value();
+			//for (size_t i = 0; i < shapeL.size(); ++i)
+			//	result *= TensorDim(shapeL[i]).value();
+
+			for (const TensorDim& s : *this)
+				result *= s.value();
+
+			return result;
+
+			// TODO forse si può fare return product(shapeL | transform(...));
+		}
 	};
 
 	template <class T, size_t N> // TODO check convertible to size_t, concept Container Convertible To 
@@ -73,6 +90,13 @@ namespace lc
 		static constexpr size_t rank() {
 			return N;
 			//return Container::size();
+		}
+
+		constexpr size_t elementsCount() const {
+			size_t result = 1;
+			for (const TensorDim& s : *this)
+				result *= s.value();
+			return result;
 		}
 	};
 
@@ -115,17 +139,7 @@ namespace lc
 	template <TensorIndexShapeContainer ShapeL> // TODO forse pure sugli altri serve concept tensorcontainer
 	constexpr size_t elemCount(const ShapeL& shapeL)
 	{
-		size_t result = 1;
-		
-		// ! temporary, see reshaper.hpp
-		//for (const TensorDim& s : shapeL)
-		//	result *= s.value();
-		for (size_t i = 0; i < shapeL.size(); ++i)
-			result *= TensorDim(shapeL[i]).value();
-
-		return result;
-
-		// TODO forse si può fare return product(shapeL | transform(...));
+		return shapeL.elementsCount();
 	}
 
 	template <TensorIndexShape ShapeL>
@@ -170,14 +184,19 @@ namespace lc
 	{
 		// alias
 		using ShapeType = TensorShape<sizeof...(Dims) + 1>;
+		using FullShapeType = FullTensorShape<sizeof...(Dims) + 1>;
 		using Base = ShapeType;
 
 		//using TensorShape<sizeof...(Dims)>::TensorShape;
 		constexpr TShape() : Base({ Dim, Dims... }) {}
 
 		static inline constexpr ShapeType shape = { Dim, Dims... };
+		static inline constexpr FullShapeType fullShape = { Dim.value(), Dims.value()...};
 
 		using Tail = TShape<Dims...>;
+
+		template <class Ty>
+		using PlainArr = TShape<Dims...>::template PlainArr<Ty>[Dim.value()];
 	};
 
 	template <>
@@ -185,12 +204,17 @@ namespace lc
 	{
 		// alias
 		using ShapeType = TensorShape<0>;
+		using FullShapeType = FullTensorShape<0>;
 		using Base = ShapeType;
 
 		//using TensorShape<sizeof...(Dims)>::TensorShape;
 		constexpr TShape() : Base({ }) {}
 
 		static inline constexpr ShapeType shape = { };
+		static inline constexpr FullShapeType fullShape = { };
+
+		template <class Ty>
+		using PlainArr = Ty;
 	};
 
 	template <class T> struct is_TShape : std::false_type {};
