@@ -19,6 +19,14 @@ TEST_CASE("constructors for fixed shape tensors", "[Tensor][fixed_shape][constru
 		REQUIRE(Tensor<int, 2, 3, 4>::shape() == Tensor<int, 2, 3, 4>::staticShape);
 		REQUIRE(Tensor<int, 2, 3, 4>::elementsCount() == (2 * 3 * 4));
 
+		// TODO maybe use alignas and static assert?
+		REQUIRE(sizeof(Tensor<uint8_t, 1>) == 1);
+		REQUIRE(sizeof(Tensor<uint8_t, 42>) == 42);
+		REQUIRE(sizeof(Tensor<uint8_t, 2, 3>) == (2 * 3));
+		REQUIRE(sizeof(Tensor<uint8_t, 2, 3, 4>) == (2 * 3 * 4));
+		REQUIRE(sizeof(Tensor<uint8_t, 2, 3, 4, 5>) == (2 * 3 * 4 * 5));
+		REQUIRE(sizeof(Tensor<uint8_t, 2, 3, 4, 5, 6>) == (2 * 3 * 4 * 5 * 6));
+
 		SECTION("Default constructor") {
 			constexpr bool ok = []() constexpr -> bool {
 				using T = Tensor<int, 2, 3, 4>;
