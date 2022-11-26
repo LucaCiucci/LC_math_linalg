@@ -21,15 +21,20 @@ namespace lc
 		constexpr TensorIndexImpl(TensorIndexImpl&&) = default;
 		constexpr TensorIndexImpl(const Base& base) : Base(base) {};
 		constexpr TensorIndexImpl(Base&& base) : Base(std::move(base)) {};
-		constexpr TensorIndexImpl(std::span<const T, _rank> span) : Base(span.begin(), span.end()) {};
+		constexpr TensorIndexImpl(const std::span<const T, _rank>& span) : TensorIndexImpl() {
+			auto it = this->begin();
+			auto spanIt = span.begin();
+			for (; it != this->end() && spanIt != span.end(); ++it, ++spanIt)
+				*it = *spanIt;
+		};
 		// TOOD written by copilot, correct? constexpr TensorIndexImpl(const size_t(&arr)[_rank]) : Base(arr) {};
 		constexpr TensorIndexImpl(const std::initializer_list<T>& list) : Base({}) {
-			for (T i = 0; i < list.size() && i < _rank; ++i)
+			for (size_t i = 0; i < list.size() && i < _rank; ++i)
 				// TODO BAD! do not use next
 				this->operator[](i) = *std::next(list.begin(), i);
 		}
 		constexpr TensorIndexImpl(std::initializer_list<T>&& list) : Base({}) {
-			for (T i = 0; i < list.size() && i < _rank; ++i)
+			for (size_t i = 0; i < list.size() && i < _rank; ++i)
 				// TODO BAD! do not use next
 				this->operator[](i) = std::move(*std::next(list.begin(), i));
 		}

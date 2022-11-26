@@ -14,6 +14,11 @@ project(
 	LANGUAGES CXX
 )
 
+set(LC_math_linalg_MAIN_PROJECT FALSE)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR AND CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+	set(LC_math_linalg_MAIN_PROJECT TRUE)
+endif()
+
 ################################
 #          LIBRARY
 ################################
@@ -23,7 +28,7 @@ add_library(LC_math_linalg STATIC)
 target_sources(LC_math_linalg PRIVATE 
 	"src/tmp.cpp"
 	"src/tmp/string_utils.cpp"
- "reasons.cpp")
+)
 
 set_target_properties(LC_math_linalg PROPERTIES CXX_STANDARD 20)
 
@@ -41,18 +46,13 @@ target_include_directories(
 		include
 )
 
-#add_executable(e "tests/tmp.cpp")
-#target_link_libraries(e PRIVATE LC_math_linalg)
-#set_target_properties(e PROPERTIES CXX_STANDARD 20)
-
-# https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md#top
-find_package(Catch2 3 REQUIRED)
-# Note: Catch2WithMain will provide us a default main
-#target_link_libraries(e PRIVATE Catch2::Catch2WithMain)
-
-add_test(NAME UnitTest COMMAND unit_test)
-
 
 add_executable(reasons "reasons.cpp")
 set_target_properties(reasons PROPERTIES CXX_STANDARD 20)
 target_link_libraries(reasons PRIVATE LC_math_linalg)
+
+if (LC_math_linalg_MAIN_PROJECT)
+	# ??? copilot-> enable_testing()
+	enable_testing()
+	add_subdirectory(tests)
+endif()

@@ -3,6 +3,11 @@
 
 #include <cstddef>
 
+#ifdef __cpp_lib_char8_t
+#include <ostream>
+#include <cassert>
+#endif
+
 namespace lc
 {
 	struct variable_size_t {}; static constexpr inline variable_size_t variable_size;
@@ -51,6 +56,9 @@ namespace lc
 			return m_size;
 		}
 
+		constexpr bool operator==(const TensorDim& other) const = default;
+		constexpr bool operator!=(const TensorDim& other) const = default;
+
 		//private: // ! <- private would not allow for using this classs as template parameter
 		size_t m_size = 0;
 		Type m_type = Type::Variable;
@@ -97,8 +105,46 @@ namespace lc
 			return m_idx;
 		}
 
+		constexpr bool operator==(const TensorPartialIndexValue& other) const = default;
+		constexpr bool operator!=(const TensorPartialIndexValue& other) const = default;
+
 		//private: // ! <- private would not allow for using this classs as template parameter
 		size_t m_idx = 0;
 		Type m_type = Type::Number;
 	};
 }
+
+#ifdef __cpp_lib_char8_t
+// TODO maybe in a cpp??
+inline std::ostream& operator<<(std::ostream& os, const lc::TensorDim& dim) {
+	if (dim.is_fixed())
+	{
+		os << dim.value();
+		return os;
+	}
+
+	if (dim.is_variable())
+	{
+		//os << "{variable}";
+		os << "~";
+		return os;
+	}
+
+	assert(0);
+	return os;
+}
+inline std::ostream& operator<<(std::ostream& os, const lc::TensorPartialIndexValue& dim) {
+	if (dim.is_set())
+	{
+		os << dim.value();
+		return os;
+	}
+	
+	if (dim.is_undefined())
+	{
+		os << ".";
+		return os;
+	}
+	return os;
+}
+#endif

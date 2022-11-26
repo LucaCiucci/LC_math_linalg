@@ -155,6 +155,8 @@ namespace lc
 
 		// TODO defaults
 
+		constexpr FixedTensorContainerData_static() = default;
+
 		constexpr FixedTensorContainerData_static(const typename _Shape::template PlainArr<const Ty>& arr);
 
 

@@ -196,7 +196,7 @@ namespace lc
 		using Tail = TShape<Dims...>;
 
 		template <class Ty>
-		using PlainArr = TShape<Dims...>::template PlainArr<Ty>[Dim.value()];
+		using PlainArr = typename TShape<Dims...>::template PlainArr<Ty>[Dim.value()];
 	};
 
 	template <>
@@ -247,24 +247,6 @@ namespace lc
 //                                                           I/O
 // ================================================================================================================================
 // ================================================================================================================================
-
-std::ostream& operator<<(std::ostream& os, const lc::TensorDim& dim) {
-	if (dim.is_fixed())
-	{
-		os << dim.value();
-		return os;
-	}
-
-	if (dim.is_variable())
-	{
-		//os << "{variable}";
-		os << "~";
-		return os;
-	}
-
-	assert(0);
-	return os;
-}
 
 template <lc::TensorIndexShape Shape>
 std::ostream& operator<<(std::ostream& os, const Shape& shape) {
