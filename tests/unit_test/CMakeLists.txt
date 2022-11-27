@@ -30,6 +30,7 @@ target_sources(
 		"Tensor/shape/TensorShape.cpp"
 		"Tensor/shape/TensorPartialIndexValue.cpp"
 		"Tensor/shape/TensorIndex.cpp"
+		"Tensor/shape/PartialFixedTensorShapeHolder.cpp"
 )
 
 target_link_libraries(

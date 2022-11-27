@@ -42,6 +42,7 @@ namespace lc
 		// TODO to solve the problem {#vector-optimization} we could store
 		// one size less, and then use the total elements count provided by the derived class in some way
 		// (CRTP)
+		// TODO convert to std::array for clarity
 		size_t m_freeSizes[variableSizeCount] = {};
 	};
 }
