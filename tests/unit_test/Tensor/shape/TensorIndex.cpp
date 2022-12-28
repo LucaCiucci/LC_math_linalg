@@ -80,7 +80,7 @@ TEST_CASE("Testing TensorIndex", "[TensorIndex][Tensor][index]") {
 				const TensorIndex<3> index = { 1, 2, 3 };
 				const auto tail = index.tail();
 				return tail[0] == 2 && tail[1] == 3;
-			};
+			}();
 			REQUIRE(ok);
 		}
 
@@ -89,7 +89,7 @@ TEST_CASE("Testing TensorIndex", "[TensorIndex][Tensor][index]") {
 				TensorIndex<3> index = { 1, 2, 3 };
 				const std::span<size_t, 2> tail = index.tailSpan();
 				return tail[0] == 2 && tail[1] == 3;
-			};
+			}();
 			REQUIRE(ok);
 		}
 
@@ -98,7 +98,7 @@ TEST_CASE("Testing TensorIndex", "[TensorIndex][Tensor][index]") {
 				const TensorIndex<3> index = { 1, 2, 3 };
 				const auto tail = index.tailSpan();
 				return tail[0] == 2 && tail[1] == 3;
-			};
+			}();
 			REQUIRE(ok);
 		}
 
