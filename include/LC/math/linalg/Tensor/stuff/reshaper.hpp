@@ -73,7 +73,7 @@ namespace lc
 					for (size_t blockIndex = nBlocks; blockIndex < nBlocksOut; ++blockIndex)
 					{
 						Ty* const outBlockData = dataOut + blockIndex * outBlockSize;
-						std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty());
+						std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty()); // ! <- Ty might be non-copyable or copy might be sub-obtimal, use something better like STL would do
 					}
 				}
 				else
@@ -99,7 +99,7 @@ namespace lc
 					for (size_t blockIndex = nBlocks; blockIndex < nBlocksOut; ++blockIndex)
 					{
 						Ty* const outBlockData = dataOut + blockIndex * outBlockSize;
-						std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty());
+						std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty()); // ! <- Ty might be non-copyable or copy might be sub-obtimal, use something better like STL would do
 					}
 				}
 
@@ -190,7 +190,7 @@ namespace lc
 				for (size_t blockIndex = nBlocks; blockIndex < nBlocksOut; ++blockIndex)
 				{
 					Ty* const outBlockData = dataOut + blockIndex * outBlockSize;
-					std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty());
+					std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty()); // ! <- Ty might be non-copyable or copy might be sub-obtimal, use something better like STL would do
 				}
 
 				// end reduction
@@ -242,7 +242,7 @@ namespace lc
 				for (size_t blockIndex = nBlocks; blockIndex < nBlocksOut; ++blockIndex)
 				{
 					Ty* const outBlockData = dataOut + blockIndex * outBlockSize;
-					std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty());
+					std::/*ranges::*/fill(outBlockData, outBlockData + outBlockSize, Ty()); // ! <- Ty might be non-copyable or copy might be sub-obtimal, use something better like STL would do
 				}
 
 				// end expansion
