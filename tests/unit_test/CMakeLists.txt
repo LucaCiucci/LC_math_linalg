@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(Catch2)
 FetchContent_Declare(
 	LC_testing_utils
 	GIT_REPOSITORY https://github.com/LucaCiucci/LC_testing_utils
-	GIT_TAG        v0.0.3
+	GIT_TAG        origin/main
 )
 FetchContent_MakeAvailable(LC_testing_utils)
 
