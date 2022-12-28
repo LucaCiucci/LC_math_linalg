@@ -33,6 +33,16 @@ int main() {
 	std::cout << t3 << std::endl;
 	std::cout << t4 << std::endl;
 
+	Tensor<double, _, _> t5({
+		{ 1, 2, 3 },
+		{ 4, 5, 6 },
+		{ 7, 8, 9 }
+		});
+
+	std::cout << t5 << std::endl;
+	t5.reshape({ 2, 5 });
+	std::cout << t5 << std::endl;
+
 
 	using A = TShape<3, 3>::PlainArr<double>;
 
