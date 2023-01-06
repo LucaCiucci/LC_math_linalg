@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include "containers/containers.hpp"
 //#include "MatImplementation.hpp"
 
@@ -40,13 +38,13 @@ namespace lc
 	template <class Field = Np>
 	using DenseMatrix = lc::MatrixImpl<Field, DenseMatrixDataHelper<double>::aaa>;*/
 
-	template <int N, int M, class Field = Np>
+	template <int N, int M, class Field = double>
 	using Matrix = lc::MatrixImpl<Field, lc::priv::FixedMatrixData<N, M, Field, Field>>;
 
-	template <class Field = Np>
+	template <class Field = double>
 	using DenseMatrix = lc::MatrixImpl<Field, lc::priv::DenseMatrixData<Field>>;
 
-	template <int N, int M, class Field = Np>
+	template <int N, int M, class Field = double>
 	using Mat = Matrix<N, M, Field>;
 }
 
