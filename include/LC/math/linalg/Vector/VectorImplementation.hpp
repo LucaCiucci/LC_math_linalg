@@ -24,6 +24,10 @@ using std::min;
 
 #include "../tmp_utils.hpp"
 
+#ifndef LC_ASSERT_M
+	#define LC_ASSERT_M(cond, msg) assert(((msg), (cond)))
+#endif
+
 namespace lc
 {
 	constexpr int DynamicSize = -1;
@@ -893,12 +897,6 @@ namespace lc
 	//           STATIC DATA
 	// ================================
 
-#undef _LC_TMP_THIS_CLASS
-
-}
-
-namespace std
-{
 	template <class T>
 	std::string to_string(T* ptr)
 	{
@@ -909,7 +907,7 @@ namespace std
 
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
 	requires requires(Field x) { { std::to_string(x) } -> std::same_as<std::string>; }
-		inline constexpr std::string to_string(const lc::VectorImpl<Field, Container, _IsStaticSize, StaticSize>& v, int summarizationThreshold = 10, int maxColumns = 100)
+		inline constexpr std::string to_string(const VectorImpl<Field, Container, _IsStaticSize, StaticSize>& v, int summarizationThreshold = 10, int maxColumns = 100)
 	{
 		std::vector<std::string> elements;
 
@@ -987,7 +985,7 @@ namespace std
 
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
 	//LC_REQUIRES(requires(Field x, std::ostream os) { { os << x }; })
-		inline constexpr std::ostream& operator<<(std::ostream& os, const lc::VectorImpl<Field, Container, _IsStaticSize, StaticSize>& v)
+		inline constexpr std::ostream& operator<<(std::ostream& os, const VectorImpl<Field, Container, _IsStaticSize, StaticSize>& v)
 	{
 		os << "(";
 
@@ -1003,3 +1001,7 @@ namespace std
 		return os;
 	}
 }
+
+
+#undef _LC_TMP_THIS_CLASS
+
