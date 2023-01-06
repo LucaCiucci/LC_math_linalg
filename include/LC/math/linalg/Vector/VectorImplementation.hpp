@@ -22,6 +22,8 @@ using std::min;
 
 #include "vector_concepts.hpp"
 
+#include "../tmp_utils.hpp"
+
 namespace lc
 {
 	constexpr int DynamicSize = -1;

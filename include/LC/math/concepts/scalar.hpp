@@ -50,6 +50,6 @@ namespace lc::math::concepts
 #define LC_MARK_AS_SCALAR_FORCED(T) namespace lc::math::concepts::__details__ { template <> concept markedAsScalar<T> = true; }
 
 	template <class T>
-	concept ScalarType = LC_CONCEPTS_INTELLISENSE_VALUE_DISABLED(/*FieldC<T> && */__details__::markedAsScalar<T>, true);
+	concept ScalarType = /*FieldC<T> && */__details__::markedAsScalar<T>;
 }
 
