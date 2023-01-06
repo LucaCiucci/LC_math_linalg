@@ -25,12 +25,6 @@ target_sources(
 	unit_test
 	PRIVATE
 		"tmp.cpp"
-		"Tensor/fixed_shape.cpp"
-		"Tensor/shape/TensorDim.cpp"
-		"Tensor/shape/TensorShape.cpp"
-		"Tensor/shape/TensorPartialIndexValue.cpp"
-		"Tensor/shape/TensorIndex.cpp"
-		"Tensor/shape/PartialFixedTensorShapeHolder.cpp"
 )
 
 target_link_libraries(

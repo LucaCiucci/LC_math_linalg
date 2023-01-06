@@ -47,9 +47,11 @@ target_include_directories(
 )
 
 
-add_executable(reasons "reasons.cpp")
-set_target_properties(reasons PROPERTIES CXX_STANDARD 20)
-target_link_libraries(reasons PRIVATE LC_math_linalg)
+if (LC_math_linalg_MAIN_PROJECT)
+	add_executable(tmp_elimina "tmp_elimina.cpp")
+	set_target_properties(tmp_elimina PROPERTIES CXX_STANDARD 20)
+	target_link_libraries(tmp_elimina PRIVATE LC_math_linalg)
+endif()
 
 if (LC_math_linalg_MAIN_PROJECT)
 	# ??? copilot-> enable_testing()
