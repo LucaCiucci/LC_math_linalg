@@ -102,7 +102,7 @@ namespace lc
 		constexpr VectorImpl& setNorm(Field r) requires lc::math::concepts::ScalarType<Field>;
 
 		// Check if a vector is null (all zeros)
-		constexpr bool isNull(void) const requires VectorialType<Field> && requires (Field x) { { x != x }; };
+		constexpr bool isNull(void) const requires lc::math::concepts::VectorialType<Field> && requires (Field x) { { x != x }; };
 
 		// Check if a vector is null with a norm within a certain tolerance
 		constexpr bool isNull(Field epsylon) const requires lc::math::concepts::ScalarType<Field>;
@@ -114,7 +114,7 @@ namespace lc
 		constexpr auto ang(const VectorImpl& other) const requires lc::math::concepts::ScalarType<Field>;
 
 		// Midpoint of two vectors
-		constexpr VectorImpl midpoint(const VectorImpl& other) const requires VectorialType<Field>;
+		constexpr VectorImpl midpoint(const VectorImpl& other) const requires lc::math::concepts::VectorialType<Field>;
 
 		// ================================
 		//         MATH OPERATORS
@@ -124,10 +124,10 @@ namespace lc
 		// prima c'era questo:
 		// requires requires (Field x) { { x += x }; }
 		// che in realt� non garantisce che Field() sia zero
-		constexpr Field componentSum(void) const requires VectorialType<Field>;
+		constexpr Field componentSum(void) const requires lc::math::concepts::VectorialType<Field>;
 
 		// Euclidean norm ( ||x||_2 )
-		constexpr auto magnitude(void) const requires VectorialType<Field>;
+		constexpr auto magnitude(void) const requires lc::math::concepts::VectorialType<Field>;
 
 		// Euclidean norm ( ||x||_2 )
 		constexpr auto lenght(void) const requires lc::math::concepts::ScalarType<Field>;
@@ -396,7 +396,7 @@ namespace lc
 
 	////////////////////////////////////////////////////////////////
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
-	inline constexpr bool VectorImpl<Field, Container, _IsStaticSize, StaticSize>::isNull(void) const requires VectorialType<Field> && requires (Field x) { { x != x }; }
+	inline constexpr bool VectorImpl<Field, Container, _IsStaticSize, StaticSize>::isNull(void) const requires lc::math::concepts::VectorialType<Field> && requires (Field x) { { x != x }; }
 	{
 		for (const auto& x : *this)
 			if (x != Field())
@@ -433,7 +433,7 @@ namespace lc
 
 	////////////////////////////////////////////////////////////////
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
-	inline constexpr VectorImpl<Field, Container, _IsStaticSize, StaticSize> VectorImpl<Field, Container, _IsStaticSize, StaticSize>::midpoint(const VectorImpl& other) const requires VectorialType<Field>
+	inline constexpr VectorImpl<Field, Container, _IsStaticSize, StaticSize> VectorImpl<Field, Container, _IsStaticSize, StaticSize>::midpoint(const VectorImpl& other) const requires lc::math::concepts::VectorialType<Field>
 	{
 		return (*this + other) / Field(2);
 	};
@@ -444,7 +444,7 @@ namespace lc
 
 	////////////////////////////////////////////////////////////////
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
-	inline constexpr Field VectorImpl<Field, Container, _IsStaticSize, StaticSize>::componentSum(void) const requires VectorialType<Field>
+	inline constexpr Field VectorImpl<Field, Container, _IsStaticSize, StaticSize>::componentSum(void) const requires lc::math::concepts::VectorialType<Field>
 	{
 		Field sum_v = Field();
 		for (const auto& x : *this)
@@ -454,7 +454,7 @@ namespace lc
 
 	////////////////////////////////////////////////////////////////
 	template <class Field, class Container, bool _IsStaticSize, size_t StaticSize>
-	inline constexpr auto VectorImpl<Field, Container, _IsStaticSize, StaticSize>::magnitude(void) const requires VectorialType<Field>
+	inline constexpr auto VectorImpl<Field, Container, _IsStaticSize, StaticSize>::magnitude(void) const requires lc::math::concepts::VectorialType<Field>
 	{
 		return this->norm();
 	};
