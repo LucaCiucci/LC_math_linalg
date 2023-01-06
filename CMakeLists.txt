@@ -13,6 +13,7 @@ project(
 	DESCRIPTION "A C++ library for vectors, matrices and other basic linear algebra stuff"
 	LANGUAGES CXX
 )
+message(STATUS "Project: ${PROJECT_NAME} ${PROJECT_VERSION} (${CMAKE_BUILD_TYPE})")
 
 set(LC_math_linalg_MAIN_PROJECT FALSE)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR AND CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
