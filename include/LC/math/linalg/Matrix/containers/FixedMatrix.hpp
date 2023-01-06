@@ -26,15 +26,10 @@ namespace lc::priv
 		static constexpr int get_N(void) { return N; }
 		static constexpr int get_M(void) { return M; }
 
-
-		////////////////////////////////////////////////////////////////
 		// inherit constructors
-		////////////////////////////////////////////////////////////////
 		using BASE::BASE;
 
-		////////////////////////////////////////////////////////////////
-		/// \brief Homogeneus matrix
-		////////////////////////////////////////////////////////////////
+		// Homogeneus matrix
 		constexpr FixedMatrixData(Field x) :
 			FixedMatrixData()
 		{
@@ -42,9 +37,7 @@ namespace lc::priv
 				deRef<Field>((*this)[i][i]) = x;
 		}
 
-		////////////////////////////////////////////////////////////////
-		/// \brief From data pointer
-		////////////////////////////////////////////////////////////////
+		// From data pointer
 		constexpr FixedMatrixData(const T* data)
 		{
 			for (auto it = this->begin(); it != this->end(); it++)
@@ -52,9 +45,7 @@ namespace lc::priv
 					*it2 = *data;
 		};
 
-		////////////////////////////////////////////////////////////////
-		/// \brief From matrix
-		////////////////////////////////////////////////////////////////
+		// From matrix
 		template <class T2, int N2, int M2, std::enable_if_t<std::convertible_to<T2, T>, bool> = true>
 		constexpr FixedMatrixData(const T2(&mat)[N2][M2])
 		{
@@ -77,19 +68,13 @@ namespace lc::priv
 		//            ACCESS
 		// ================================
 
-		////////////////////////////////////////////////////////////////
-		/// \brief Number of rows
-		////////////////////////////////////////////////////////////////
+		// Number of rows
 		static constexpr int rows(void) { return N; };
 
-		////////////////////////////////////////////////////////////////
-		/// \brief Number of columns
-		////////////////////////////////////////////////////////////////
+		// Number of columns
 		static constexpr int cols(void) { return M; };
 
-		////////////////////////////////////////////////////////////////
-		/// \brief Number of elements
-		////////////////////////////////////////////////////////////////
+		// Number of elements
 		static constexpr std::size_t size(void) { return THIS_CLASS::rows() * THIS_CLASS::cols(); }
 
 		T& at(size_t i, size_t j) { return (*this)[i][j]; }
@@ -114,18 +99,14 @@ namespace lc::priv
 			return FINAL_CLASS<N, M, Field, T>(Field(1));
 		}
 
-		////////////////////////////////////////////////////////////////
-		/// \brief swap two rows
-		////////////////////////////////////////////////////////////////
+		// swap two rows
 		constexpr FINAL_CLASS<N, M, Field, T>& swapRows(size_t i, size_t j)
 		{
 			std::swap((*this)[i], (*this)[j]);
 			return *(FINAL_CLASS<N, M, Field, T>*)this;
 		}
 
-		////////////////////////////////////////////////////////////////
-		/// \brief swap two columns
-		////////////////////////////////////////////////////////////////
+		// swap two columns
 		constexpr FINAL_CLASS<N, M, Field, T>& swapColumns(size_t i, size_t j)
 		{
 			for (auto& r : *this)
@@ -137,9 +118,7 @@ namespace lc::priv
 		//			MATH OPERATORS
 		// ================================
 
-		////////////////////////////////////////////////////////////////
-		/// \brief return the transposed marix
-		////////////////////////////////////////////////////////////////
+		// return the transposed marix
 		constexpr FINAL_CLASS<M, N, Field, T> transposed(void) const
 		{
 			FixedMatrixData<M, N, Field, Field> tmp;
@@ -149,9 +128,7 @@ namespace lc::priv
 			return (FINAL_CLASS<M, N, Field, T>&)tmp;
 		}
 
-		////////////////////////////////////////////////////////////////
-		/// \brief Transpose
-		////////////////////////////////////////////////////////////////
+		// Transpose
 		constexpr FINAL_CLASS<N, M, Field, T>& transpose(void) requires (N == M)
 		{
 			for (std::size_t i = 1; i < this->rows(); i++)
